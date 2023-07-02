@@ -5,8 +5,8 @@ kNN-TL: k-Nearest-Neighbor Transfer Learning for Low-Resource Neural Machine Tra
 Transfer learning is an effective method to enhance low-resource NMT through the parent-child framework. kNN-TL aims to leverage the parent's knowledge throughout the entire developing process of the child model. The approach includes a parent-child representation alignment method, which ensures consistency in the output representations between the two models, and a child-aware datastore construction method that improves inference efficiency by selectively distilling the parent datastore based on relevance to the child model. 
 
 <figure class="half">
-    <img src="./image/training.png" width="31%" title="Poster of the article">
-    <img src="./image/inference.png"width="68.25%" title="Poster of the article">
+    <img src="./image/training.png" width="30.8%" title="Poster of the article">
+    <img src="./image/inference.png"width="68%" title="Poster of the article">
 </figure>
 
 
