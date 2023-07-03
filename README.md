@@ -4,11 +4,12 @@ kNN-TL: k-Nearest-Neighbor Transfer Learning for Low-Resource Neural Machine Tra
 
 Transfer learning is an effective method to enhance low-resource NMT through the parent-child framework. kNN-TL aims to leverage the parent's knowledge throughout the entire developing process of the child model. The approach includes a parent-child representation alignment method, which ensures consistency in the output representations between the two models, and a child-aware datastore construction method that improves inference efficiency by selectively distilling the parent datastore based on relevance to the child model. 
 
-<figure class="half">
-    <img src="./image/training.png" width="27.25%" title="Poster of the article"></img>
-    <img src="./image/inference.png"width="60%" title="Poster of the article"></img>
-    <p class="image-caption" align="center">Training and Inference framework of kNN-TL. </p>
-</figure>
+<div align="center">
+    <img src="./image/training.png" width="30%" title="Framework of ConsisTL." </img>
+    <img src="./image/inference.png" width="66%" title="Framework of ConsisTL." </img>
+    <p class="image-caption">Training and Inference framework of kNN-TL. </p>
+</div>
+
 
 ## Installation
 ```bash
@@ -38,7 +39,7 @@ fairseq-preprocess -s de -t en --trainpref de_en/pack_clean/train --validpref de
 
 ## Training
 
-#### Parent Models
+### Parent Models
 ```bash
 cd train-scripts
 BIN_PARENT_DATA=${BIN_PARENT_DATA} # path of binarized parent data
@@ -47,7 +48,7 @@ bash train_parent.sh de en $BIN_PARENT_DATA
 ## train for en-de (reversed parent model)
 bash train_parent.sh en de $BIN_PARENT_DATA
 ```
-#### Pseudo Parent Data Construction
+### Pseudo Parent Data Construction
 For each instance in child train data (Tr-En), use the reversed parent model to back-translate the target sentence (En) into the source sentence (De).
 ```bash
 CHILD_EN=${CHILD_EN} # target sentences 
@@ -56,7 +57,7 @@ AUX_SRC_BIN=${AUX_SRC_BIN} # auxiliary source
 #gen synthetic de-en for tr-en
 bash gen.sh $CHILD_EN $BIN_TEACHER_DATA $REVERSED_TEACHER_CHECKPOINT $AUX_SRC_BIN
 ```
-#### Child model
+### Child model
 Exploit Token Matching (TM) for initialization, then train the child model with parent-child representation alignment.
 ```bash
 
@@ -70,20 +71,20 @@ python ../kNN-TL/preprocessing_scripts/TM.py --checkpoint $PARENT_CHECKPOINT --o
 bash kNN-TL.sh $AUX_SRC_BIN-bin $PARENT_CHECKPOINT $BIN_PARENT_DATA $BIN_CHILD_DATA $INIT_CHECKPOINT
 ```
 ## Inference
-#### Origin Parent Datastore Building
+### Origin Parent Datastore Building
 Use the parent model and parent data to build the origi parent datastore.
 ```bash
 PARENT_DATASTORE=${PARENT_DATASTORE} # The path to save the parent datastore
 bash build_parent_datastore.sh $PARENT_CHECKPOINT $BIN_PARENT_DATA $PARENT_DATASTORE
 ```
-#### Child-Aware Parent Datastore Building
+### Child-Aware Parent Datastore Building
 Use the parent model to inference on the pseudo parent data, with kNN retrieval on the origin parent datastore. Subsets of datastore indexes will be generated in `PSEUDO_PARENT_DATA`.
 ```bash
 # Combine the child target (En) and its pseudo parent source (De) generated in Pseudo Parent Data Construction as ‘PSEUDO_PARENT_DATA’
 PSEUDO_PARENT_DATA=${PSEUDO_PARENT_DATA}
 bash inference_pseudo_parent.sh $PARENT_CHECKPOINT $PSEUDO_PARENT_DATA $PARENT_DATASTORE
 ```
-#### Parent-Enhanced Model Prediction
+### Parent-Enhanced Model Prediction
 Tuning different subsets and parameters on the Valid Set, then selecting the best combination of parameters to evaluate performance on the Test Set. More parameters can be modified in the script.
 ```bash
 GEN_SUBSET=${GEN_SUBSET} # [valid,test]
