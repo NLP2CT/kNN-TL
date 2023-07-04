@@ -68,7 +68,7 @@ PARENT_CHECKPOINT=${PARENT_CHECKPOINT} # path of parent checkpoint
 # Token matching
 python ../kNN-TL/preprocessing_scripts/TM.py --checkpoint $PARENT_CHECKPOINT --output $INIT_CHECKPOINT --parent-dict $BIN_PARENT_DATA/dict.de.txt --child-dict $BIN_CHILD_DATA/dict.tr.txt --switch-dict src
 # train child model for kNN-TL
-bash kNN-TL.sh $AUX_SRC_BIN-bin $PARENT_CHECKPOINT $BIN_PARENT_DATA $BIN_CHILD_DATA $INIT_CHECKPOINT
+bash train_child.sh $AUX_SRC_BIN-bin $PARENT_CHECKPOINT $BIN_PARENT_DATA $BIN_CHILD_DATA $INIT_CHECKPOINT
 ```
 ## Inference
 ### Origin Parent Datastore Building
