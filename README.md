@@ -14,9 +14,10 @@ Transfer learning is an effective method to enhance low-resource NMT through the
 ## Installation
 ```bash
 cd kNN-TL
-pip install --editable .
+pip install --editable . # python >=3.7
 cd ..
-# python>=3.7
+conda install faiss-gpu -c pytorch
+pip install sacremoses==0.0.53
 ```
 
 ## Data Preparation 
@@ -72,13 +73,13 @@ bash train_child.sh $AUX_SRC_BIN-bin $PARENT_CHECKPOINT $BIN_PARENT_DATA $BIN_CH
 ```
 ## Inference
 ### Origin Parent Datastore Building
-Use the parent model and parent data to build the origi parent datastore.
+Use the parent model and parent data to build the origin parent datastore.
 ```bash
 PARENT_DATASTORE=${PARENT_DATASTORE} # The path to save the parent datastore
 bash build_parent_datastore.sh $PARENT_CHECKPOINT $BIN_PARENT_DATA $PARENT_DATASTORE
 ```
 ### Child-Aware Parent Datastore Building
-Use the parent model to inference on the pseudo parent data, with kNN retrieval on the origin parent datastore. Subsets of datastore indexes will be generated in `PSEUDO_PARENT_DATA`.
+Use the parent model to inference on the pseudo parent data, with kNN retrieval on the origin parent datastore. Subsets of datastore indexes will be generated in `PSEUDO_PARENT_DATA`. You can also skip this step and potentially get a tiny boost at the expense of inference rate.
 ```bash
 # Combine the child target (En) and its pseudo parent source (De) generated in Pseudo Parent Data Construction as ‘PSEUDO_PARENT_DATA’
 PSEUDO_PARENT_DATA=${PSEUDO_PARENT_DATA}
@@ -90,4 +91,25 @@ Tuning different subsets and parameters on the Valid Set, then selecting the bes
 GEN_SUBSET=${GEN_SUBSET} # [valid,test]
 SUBSET_PATH=${SUBSET_PATH} # Path of the subset in the `PSEUDO_PARENT_DATA`
 bash inference_child.sh $CHILD_MODEL $CHILD_DATA $GEN_SUBSET $DATA_STORE $SUBSET_PATH $RESULT_PATH 
+```
+
+## Citation
+```bibtex
+@inproceedings{liu-etal-2023-knn,
+    title = "k{NN}-{TL}: k-Nearest-Neighbor Transfer Learning for Low-Resource Neural Machine Translation",
+    author = "Liu, Shudong  and
+      Liu, Xuebo  and
+      Wong, Derek F.  and
+      Li, Zhaocong  and
+      Jiao, Wenxiang  and
+      Chao, Lidia S.  and
+      Zhang, Min",
+    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.acl-long.105",
+    pages = "1878--1891",
+}
 ```
