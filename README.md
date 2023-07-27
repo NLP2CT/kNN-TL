@@ -79,7 +79,7 @@ PARENT_DATASTORE=${PARENT_DATASTORE} # The path to save the parent datastore
 bash build_parent_datastore.sh $PARENT_CHECKPOINT $BIN_PARENT_DATA $PARENT_DATASTORE
 ```
 ### Child-Aware Parent Datastore Building
-Use the parent model to inference on the pseudo parent data, with kNN retrieval on the origin parent datastore. Subsets of datastore indexes will be generated in `PSEUDO_PARENT_DATA`. You can also skip this step and potentially get a tiny boost at the expense of inference rate.
+Use the parent model to inference on the pseudo parent data, with kNN retrieval on the origin parent datastore. Subsets of datastore indexes will be generated in `PSEUDO_PARENT_DATA`. You can also skip this step and potentially get a tiny boost at the expense of inference speed.
 ```bash
 # Combine the child target (En) and its pseudo parent source (De) generated in Pseudo Parent Data Construction as ‘PSEUDO_PARENT_DATA’
 PSEUDO_PARENT_DATA=${PSEUDO_PARENT_DATA}
